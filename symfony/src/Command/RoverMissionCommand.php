@@ -31,25 +31,43 @@ class RoverMissionCommand extends Command
     {
         $this
             // the short description shown while running "php bin/console list"
-            ->setDescription('Mars Rover Mission - The rover can move forward (F) - The rover can move left/right (L,R).');
+            ->setDescription('Mars Rover Mission - The rover can move forward (F) - The rover can move left/right (L,R).')
+            ->addArgument('commands.', InputArgument::REQUIRED, 'Collection of commands to move rover.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $io->newLine();
-        $io->note('Validating offers suspected of having a wrong price...');
+        $output->writeln('commands recivied: '.$input->getArgument('commands'));
+        $io->note('Validating commands to start the exploration of Mars...');
         $io->newLine();
 
-        $request = new RoverMissionRequest();
+        // Validate commands
+        /*$request = new RoverMissionRequest();
+        // Create matrix of Mars
+        // Add obstacle to Mars matrix
+        // Get commands to move rover by Mars matrix
+        // Return result of exploration
         $response = $this->useCase->run($request);
         if (json_decode($response, true)['result']) {
             $io->success('Offers that are above average!');
             var_dump(json_decode($response, true)['result']);
         } else {
             $io->error('Error validating offers suspected of having a wrong price!');
-        }
+        }*/
 
         return 0;
+    }
+
+    /**
+     * Validate input commands from earth
+     * @param string $commands
+     * @return bool
+     */
+    private function validateCommands(string $commands): bool
+    {
+
+        return true;
     }
 }
