@@ -65,9 +65,15 @@ $ docker-compose exec php sh
 
 ## Execute command
 
+1. Up Docker containers
+    ```shell script
+    $ docker-compose up -d
+    ```
 1. Enter to php container
-2. Execute command:
-
-```shell script
-$ php bin/console housfy:rover-mission FFRRFFFRL
-```
+   ```shell script
+   $ docker-compose exec php sh
+   ```
+1. Execute command:
+    ```shell script
+    $ php bin/console housfy:rover-mission FFRRFFFRL
+    ```

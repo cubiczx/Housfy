@@ -7,5 +7,5 @@ namespace App\Domain\Service;
 interface RoverMissionServiceInterface
 {
 
-    public function validateOffers();
+    public function startMission(string $commands);
 }

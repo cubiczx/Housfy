@@ -25,7 +25,7 @@ class RoverMissionUseCase
      */
     public function run(RoverMissionRequest $request)
     {
-        $result = $this->managerService->validateOffers();
+        $result = $this->managerService->startMission($request->commands);
 
         return json_encode([
             'result' => $result
