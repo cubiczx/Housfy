@@ -9,13 +9,19 @@ use PHPUnit\Framework\TestCase;
 
 class RoverMissionUseCaseTest extends TestCase
 {
-    public function testOk()
+    public function test()
     {
-        $request = new RoverMissionRequest();
-        $service = $this->createService();
-        $useCase = new RoverMissionUseCase($service);
-        $response = $useCase->run($request);
-        $this->assertJson($response);
+        try {
+            $request = new RoverMissionRequest();
+            $request->commands = 'FFRRFFFRL';
+            $service = $this->createService();
+            $useCase = new RoverMissionUseCase($service);
+            $response = $useCase->run($request);
+            $this->assertJson($response);
+        } catch (\Exception $e) {
+            $this->expectException(\Exception::class);
+            throw $e;
+        }
     }
 
     private function createService(): RoverMissionService

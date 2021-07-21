@@ -33,7 +33,7 @@ class RoverMissionService implements RoverMissionServiceInterface
      * Start mission in Mars with Rover
      *
      * @param string $commands
-     * @return array
+     * @return array[]
      * @throws \Exception
      */
     public function startMission(string $commands): array

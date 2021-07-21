@@ -22,14 +22,20 @@ class RoverMissionServiceTest extends TestCase
     /**
      * @throws ResourceNotFoundException
      * @throws CustomerNotFoundException
+     * @throws \Exception
      */
-    public function testShouldReturnCustomerSnapshotIfOperationIsNotActive(): void
+    public function testStartMission(): void
     {
-        $roverMissionService = new RoverMissionService();
-
-        $offersAboveAverage = $roverMissionService->validateOffers();
-        $this->assertIsArray($offersAboveAverage);
-        $this->assertArrayHasKey('5', $offersAboveAverage);
+        try {
+            $roverMissionService = new RoverMissionService();
+            $missionResponse = $roverMissionService->startMission('FFRRFFFRL');
+            $this->assertIsArray($missionResponse);
+            $this->assertArrayHasKey('error', $missionResponse[0]);
+            $this->assertArrayHasKey('message', $missionResponse[0]);
+        } catch (\Exception $e) {
+            $this->expectException(\Exception::class);
+            throw $e;
+        }
     }
 
 }
