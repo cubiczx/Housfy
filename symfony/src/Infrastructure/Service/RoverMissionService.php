@@ -6,6 +6,7 @@ namespace App\Infrastructure\Service;
 
 use App\Domain\Model\Mars;
 use App\Domain\Service\RoverMissionServiceInterface;
+use function PHPUnit\Framework\throwException;
 
 class RoverMissionService implements RoverMissionServiceInterface
 {
@@ -22,9 +23,10 @@ class RoverMissionService implements RoverMissionServiceInterface
     public function __construct(){
         // Create matrix of Mars
         $this->mars = new Mars();
-        $this->roverPosition[0][0] = 0;
-        echo "__construct";
-        var_dump($this->roverPosition);
+        $this->roverPosition['x'] = rand(0, 200);
+        $this->roverPosition['y'] = rand(0, 200);
+        $this->roverPosition['orientation'] = substr(str_shuffle("NSEW"), 0, 1);
+        echo "The Rover has landed at (" . $this->roverPosition['x'] . "," . $this->roverPosition['y'] .")";
     }
 
     /**
@@ -32,29 +34,149 @@ class RoverMissionService implements RoverMissionServiceInterface
      *
      * @param string $commands
      * @return array
+     * @throws \Exception
      */
     public function startMission(string $commands): array
     {
-        // var_dump($this->mars);
         // Get commands to move rover by Mars matrix
         foreach (str_split($commands) as $command) {
-            echo $command;
             switch ($command) {
                 case 'F':
-                    // Increase Y
-                    //$this->roverPosition[][]
+                    switch ($this->roverPosition['orientation']) {
+                        case 'N':
+                            // Increase Y
+                            $nextYAxis = ++$this->roverPosition['y'];
+                            // Validate next position
+                            $this->roverPosition['y'] = $this->validateStep($this->roverPosition['x'], $nextYAxis)
+                                ? $nextYAxis
+                                : $this->roverPosition['y'];
+                            break;
+                        case 'S':
+                            // Decrease Y
+                            $nextYAxis = --$this->roverPosition['y'];
+                            // Validate next position
+                            $this->roverPosition['y'] = $this->validateStep($this->roverPosition['x'], $nextYAxis)
+                                ? $nextYAxis
+                                : $this->roverPosition['y'];
+                            break;
+                        case 'E':
+                            // Increase X
+                            $nextXAxis = --$this->roverPosition['x'];
+                            // Validate next position
+                            $this->roverPosition['x'] = $this->validateStep($nextXAxis, $this->roverPosition['y'])
+                                ? $nextXAxis
+                                : $this->roverPosition['x'];
+                            break;
+                        case 'W':
+                            // Decrease X
+                            $nextXAxis = --$this->roverPosition['x'];
+                            // Validate next position
+                            $this->roverPosition['x'] = $this->validateStep($nextXAxis, $this->roverPosition['y'])
+                                ? $nextXAxis
+                                : $this->roverPosition['x'];
+                            break;
+                    }
                     break;
                 case 'L':
-                    // Decrease X
+                    switch ($this->roverPosition['orientation']) {
+                        case 'N':
+                            // Decrease X
+                            $nextXAxis = --$this->roverPosition['x'];
+                            // Validate next position
+                            $this->roverPosition['x'] = $this->validateStep($nextXAxis, $this->roverPosition['y'])
+                                ? $nextXAxis
+                                : $this->roverPosition['x'];
+                            break;
+                        case 'S':
+                            // Increase X
+                            $nextXAxis = --$this->roverPosition['x'];
+                            // Validate next position
+                            $this->roverPosition['x'] = $this->validateStep($nextXAxis, $this->roverPosition['y'])
+                                ? $nextXAxis
+                                : $this->roverPosition['x'];
+                            break;
+                        case 'E':
+                            // Increase Y
+                            $nextYAxis = ++$this->roverPosition['y'];
+                            // Validate next position
+                            $this->roverPosition['y'] = $this->validateStep($this->roverPosition['x'], $nextYAxis)
+                                ? $nextYAxis
+                                : $this->roverPosition['y'];
+                            break;
+                        case 'W':
+                            // Decrease Y
+                            $nextYAxis = --$this->roverPosition['y'];
+                            // Validate next position
+                            $this->roverPosition['y'] = $this->validateStep($this->roverPosition['x'], $nextYAxis)
+                                ? $nextYAxis
+                                : $this->roverPosition['y'];
+                            break;
+                    }
                     break;
                 case 'R':
-                    // Increase X
-                    break;
+                    switch ($this->roverPosition['orientation']) {
+                        case 'N':
+                            // Increase X
+                            $nextXAxis = --$this->roverPosition['x'];
+                            // Validate next position
+                            $this->roverPosition['x'] = $this->validateStep($nextXAxis, $this->roverPosition['y'])
+                                ? $nextXAxis
+                                : $this->roverPosition['x'];
+                            break;
+                            break;
+                        case 'S':
+                            // Decrease X
+                            $nextXAxis = --$this->roverPosition['x'];
+                            // Validate next position
+                            $this->roverPosition['x'] = $this->validateStep($nextXAxis, $this->roverPosition['y'])
+                                ? $nextXAxis
+                                : $this->roverPosition['x'];
+                            break;
+                        case 'E':
+                            // Decrease Y
+                            $nextYAxis = --$this->roverPosition['y'];
+                            // Validate next position
+                            $this->roverPosition['y'] = $this->validateStep($this->roverPosition['x'], $nextYAxis)
+                                ? $nextYAxis
+                                : $this->roverPosition['y'];
+                            break;
+                        case 'W':
+                            // Increase Y
+                            $nextYAxis = ++$this->roverPosition['y'];
+                            // Validate next position
+                            $this->roverPosition['y'] = $this->validateStep($this->roverPosition['x'], $nextYAxis)
+                                ? $nextYAxis
+                                : $this->roverPosition['y'];
+                            break;
+                    }
             }
         }
         // Return result of exploration
+        return array([
+            'error' => false,
+            'message' => "The Rover has reached its destination (" . $this->roverPosition['x'] . "," . $this->roverPosition['y'] .")"
+        ]);
+    }
 
-        // Return
-        return array();
+    /**
+     * Validate position with Mars surface and check possible collision with obstacle
+     *
+     * @param int $xAxis
+     * @param string $yAxis
+     * @return bool
+     * @throws \Exception
+     */
+    private function validateStep(int $xAxis, string $yAxis): bool
+    {
+        if ($this->mars->checkBoundaries($xAxis, $yAxis)){
+            if($this->mars->haveObstacle($xAxis, $yAxis)){
+                // An error message would also be valid, but I wanted to use exceptions to show their use
+                throw new \Exception('Cannot move to (' . $xAxis . ',' . $yAxis . ') position due to an obstacle');
+            }
+        }else{
+            // An error message would also be valid, but I wanted to use exceptions to show their use
+            throw new \Exception('It cannot exceed the limits of the Martian surface');
+        }
+        return true;
     }
 }

@@ -8,7 +8,7 @@ final class Mars
 {
     const XSURFACE = 200;
     const YSURFACE = 200;
-    const OBSTACLES = self::XSURFACE * self::YSURFACE;
+    const OBSTACLES = (self::XSURFACE/2 * self::YSURFACE/2);
 
     /**
      * @var array $surface
@@ -50,6 +50,41 @@ final class Mars
                 $this->addedObstacles ++;
             }
             return $haveObstacle;
+        }
+        return false;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSurface(): array
+    {
+        return $this->surface;
+    }
+
+    /**
+     * Find obstacle in mars surface
+     *
+     * @param int $xAxis
+     * @param int $yAxis
+     * @return bool
+     */
+    public function haveObstacle(int $xAxis, int $yAxis): bool
+    {
+        return $this->surface[$xAxis][$yAxis];
+    }
+
+    /**
+     * Check Mars surface boundaries
+     *
+     * @param int $xAxis
+     * @param int $yAxis
+     * @return bool
+     */
+    public function checkBoundaries(int $xAxis, int $yAxis): bool
+    {
+        if($xAxis < self::XSURFACE && $yAxis < self::YSURFACE){
+            return true;
         }
         return false;
     }

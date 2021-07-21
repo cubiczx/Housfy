@@ -53,12 +53,11 @@ class RoverMissionCommand extends Command
         $request = new RoverMissionRequest();
         $request->commands = $commands;
         $response = $this->useCase->run($request);
-        /*if (json_decode($response, true)['result']) {
-            $io->success('Offers that are above average!');
-            var_dump(json_decode($response, true)['result']);
+        if (!json_decode($response, true)['result'][0]['error']) {
+            $io->success(json_decode($response, true)['result'][0]['message']);
         } else {
-            $io->error('Error validating offers suspected of having a wrong price!');
-        }*/
+            $io->error('The Rover was unable to reach its destination');
+        }
 
         return 0;
     }
