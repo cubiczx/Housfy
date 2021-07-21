@@ -77,3 +77,7 @@ $ docker-compose exec php sh
     ```shell script
     $ php bin/console housfy:rover-mission FFRRFFFRL
     ```
+1. Execute tests:
+    ```shell script
+    $ ./vendor/bin/phpunit tests
+    ```
