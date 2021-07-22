@@ -45,7 +45,7 @@ class RoverMissionService implements RoverMissionServiceInterface
                     switch ($this->roverPosition['orientation']) {
                         case 'N':
                             // Increase Y
-                            $nextYAxis = ++$this->roverPosition['y'];
+                            $nextYAxis = $this->roverPosition['y'] + 1;
                             // Validate next position
                             $this->roverPosition['y'] = $this->validateStep($this->roverPosition['x'], $nextYAxis)
                                 ? $nextYAxis
@@ -53,7 +53,7 @@ class RoverMissionService implements RoverMissionServiceInterface
                             break;
                         case 'S':
                             // Decrease Y
-                            $nextYAxis = --$this->roverPosition['y'];
+                            $nextYAxis = $this->roverPosition['y'] - 1;
                             // Validate next position
                             $this->roverPosition['y'] = $this->validateStep($this->roverPosition['x'], $nextYAxis)
                                 ? $nextYAxis
@@ -61,7 +61,7 @@ class RoverMissionService implements RoverMissionServiceInterface
                             break;
                         case 'E':
                             // Increase X
-                            $nextXAxis = --$this->roverPosition['x'];
+                            $nextXAxis = $this->roverPosition['x'] + 1;
                             // Validate next position
                             $this->roverPosition['x'] = $this->validateStep($nextXAxis, $this->roverPosition['y'])
                                 ? $nextXAxis
@@ -69,7 +69,7 @@ class RoverMissionService implements RoverMissionServiceInterface
                             break;
                         case 'W':
                             // Decrease X
-                            $nextXAxis = --$this->roverPosition['x'];
+                            $nextXAxis = $this->roverPosition['x'] - 1;
                             // Validate next position
                             $this->roverPosition['x'] = $this->validateStep($nextXAxis, $this->roverPosition['y'])
                                 ? $nextXAxis
@@ -81,7 +81,7 @@ class RoverMissionService implements RoverMissionServiceInterface
                     switch ($this->roverPosition['orientation']) {
                         case 'N':
                             // Decrease X
-                            $nextXAxis = --$this->roverPosition['x'];
+                            $nextXAxis = $this->roverPosition['x'] - 1;
                             // Validate next position
                             $this->roverPosition['x'] = $this->validateStep($nextXAxis, $this->roverPosition['y'])
                                 ? $nextXAxis
@@ -89,7 +89,7 @@ class RoverMissionService implements RoverMissionServiceInterface
                             break;
                         case 'S':
                             // Increase X
-                            $nextXAxis = --$this->roverPosition['x'];
+                            $nextXAxis = $this->roverPosition['x'] + 1;
                             // Validate next position
                             $this->roverPosition['x'] = $this->validateStep($nextXAxis, $this->roverPosition['y'])
                                 ? $nextXAxis
@@ -97,7 +97,7 @@ class RoverMissionService implements RoverMissionServiceInterface
                             break;
                         case 'E':
                             // Increase Y
-                            $nextYAxis = ++$this->roverPosition['y'];
+                            $nextYAxis = $this->roverPosition['y'] + 1;
                             // Validate next position
                             $this->roverPosition['y'] = $this->validateStep($this->roverPosition['x'], $nextYAxis)
                                 ? $nextYAxis
@@ -105,7 +105,7 @@ class RoverMissionService implements RoverMissionServiceInterface
                             break;
                         case 'W':
                             // Decrease Y
-                            $nextYAxis = --$this->roverPosition['y'];
+                            $nextYAxis = $this->roverPosition['y'] - 1;
                             // Validate next position
                             $this->roverPosition['y'] = $this->validateStep($this->roverPosition['x'], $nextYAxis)
                                 ? $nextYAxis
@@ -117,7 +117,7 @@ class RoverMissionService implements RoverMissionServiceInterface
                     switch ($this->roverPosition['orientation']) {
                         case 'N':
                             // Increase X
-                            $nextXAxis = --$this->roverPosition['x'];
+                            $nextXAxis = $this->roverPosition['x'] + 1;
                             // Validate next position
                             $this->roverPosition['x'] = $this->validateStep($nextXAxis, $this->roverPosition['y'])
                                 ? $nextXAxis
@@ -126,7 +126,7 @@ class RoverMissionService implements RoverMissionServiceInterface
                             break;
                         case 'S':
                             // Decrease X
-                            $nextXAxis = --$this->roverPosition['x'];
+                            $nextXAxis = $this->roverPosition['x'] - 1;
                             // Validate next position
                             $this->roverPosition['x'] = $this->validateStep($nextXAxis, $this->roverPosition['y'])
                                 ? $nextXAxis
@@ -134,7 +134,7 @@ class RoverMissionService implements RoverMissionServiceInterface
                             break;
                         case 'E':
                             // Decrease Y
-                            $nextYAxis = --$this->roverPosition['y'];
+                            $nextYAxis = $this->roverPosition['y'] - 1;
                             // Validate next position
                             $this->roverPosition['y'] = $this->validateStep($this->roverPosition['x'], $nextYAxis)
                                 ? $nextYAxis
@@ -142,7 +142,7 @@ class RoverMissionService implements RoverMissionServiceInterface
                             break;
                         case 'W':
                             // Increase Y
-                            $nextYAxis = ++$this->roverPosition['y'];
+                            $nextYAxis = $this->roverPosition['y'] + 1;
                             // Validate next position
                             $this->roverPosition['y'] = $this->validateStep($this->roverPosition['x'], $nextYAxis)
                                 ? $nextYAxis
@@ -171,11 +171,11 @@ class RoverMissionService implements RoverMissionServiceInterface
         if ($this->mars->checkBoundaries($xAxis, $yAxis)){
             if($this->mars->haveObstacle($xAxis, $yAxis)){
                 // An error message would also be valid, but I wanted to use exceptions to show their use
-                throw new \Exception('Cannot move to (' . $xAxis . ',' . $yAxis . ') position due to an obstacle');
+                throw new \Exception('Cannot move to (' . $xAxis . ',' . $yAxis . ') position due to an obstacle. Rover remains on the position (' . $this->roverPosition['x'] . ',' . $this->roverPosition['y'] . ')');
             }
         }else{
             // An error message would also be valid, but I wanted to use exceptions to show their use
-            throw new \Exception('It cannot exceed the limits of the Martian surface');
+            throw new \Exception('It cannot exceed the limits of the Martian surface. Rover remains on the position (' . $this->roverPosition['x'] . ',' . $this->roverPosition['y'] . ')');
         }
         return true;
     }
