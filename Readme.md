@@ -78,6 +78,7 @@ $ docker-compose exec php sh
     $ php bin/console housfy:rover-mission FFRRFFFRL
     ```
 1. Execute tests:
+   Remember use symfony/phpunit.xml.dist configuration file and change permissions to 666 to .phpunit.result.cache when exists
     ```shell script
     $ ./vendor/bin/phpunit tests
     ```
