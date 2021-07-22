@@ -123,7 +123,6 @@ class RoverMissionService implements RoverMissionServiceInterface
                                 ? $nextXAxis
                                 : $this->roverPosition['x'];
                             break;
-                            break;
                         case 'S':
                             // Decrease X
                             $nextXAxis = $this->roverPosition['x'] - 1;
