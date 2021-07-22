@@ -6,7 +6,6 @@ namespace App\Infrastructure\Service;
 
 use App\Domain\Model\Mars;
 use App\Domain\Service\RoverMissionServiceInterface;
-use function PHPUnit\Framework\throwException;
 
 class RoverMissionService implements RoverMissionServiceInterface
 {
